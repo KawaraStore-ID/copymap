@@ -1,28 +1,21 @@
-# Copy Map Script - KawaraStudio
+# Copy Map By KawaraStudio
 
-Script Roblox untuk **meng-copy seluruh map/game** secara otomatis menggunakan fungsi `saveinstance()`.
+Script Roblox untuk **meng-copy seluruh map/game** secara otomatis menggunakan `saveinstance()`.
 
 ---
 
 ## ✨ Fitur
 
-- Mengambil nama game secara otomatis dari `game.Name`
-- Membersihkan nama file agar aman untuk disimpan
-- Menyimpan otomatis ke folder `COPY MAP - Nama_Game`
-- Decompile script (`Decompile = true`)
-- Include hampir semua service penting Roblox
-- Menampilkan progress saat proses saving
+- Mengambil nama game secara otomatis
+- Membersihkan nama file agar aman disimpan
+- Menyimpan ke folder `COPY MAP - Nama_Game`
+- Decompile otomatis (`Decompile = true`)
+- Include service-service penting
+- Menampilkan progress saving
 
 ---
 
-## 📥 Cara Menggunakan
+## 📥 Cara Menggunakan (Loadstring)
 
-1. Download file script ini (`copy-map.lua`)
-2. Masukkan script ke executor Roblox kamu
-3. Jalankan di dalam game yang ingin di-copy
-
----
-
-## 📁 Hasil Save
-
-Script akan menyimpan hasil copy ke folder:
+```lua
+loadstring(game:HttpGet("https://raw.githubusercontent.com/KawaraStore-ID/copymap/main/CopyMapByKawara.lua"))()
