@@ -1,14 +1,54 @@
+-- =============================================
+--     COPY MAP BY KAWARASTUDIO
+--     Executor : Xeno / Any Synapse Support
+-- =============================================
+
 local synsaveinstance = loadstring(game:HttpGet("https://raw.githubusercontent.com/luau/UniversalSynSaveInstance/main/saveinstance.luau", true))()
 
+-- Ambil nama game otomatis
+local function getCleanGameName()
+    local success, name = pcall(function()
+        return game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name
+    end)
+    
+    if success and name then
+        -- Bersihkan nama agar aman untuk file
+        local clean = name:gsub("[%s%c%p]", "_")
+        clean = clean:gsub("__+", "_")
+        clean = clean:sub(1, 100) -- Batasi panjang nama
+        return clean
+    else
+        return "Unknown_Map"
+    end
+end
+
+local GameName = getCleanGameName()
+local Timestamp = os.date("%Y%m%d_%H%M%S")
+
 local Options = {
-    Name = "Copied_Map_" .. os.date("%Y%m%d_%H%M%S"),  -- Nama file otomatis
-    SaveTerrain = true,          -- Simpan terrain (penting!)
-    DecompileScripts = true,     -- Decompile script (bisa dibuka di Studio)
-    SaveBytecode = true,
-    SafeMode = true,             -- Lebih aman
-    Timeout = 30
+    Name = "COPYMAP_" .. GameName .. "_" .. Timestamp,
+    SaveTerrain = true,
+    DecompileScripts = true,
+    SaveBytecode = false,           -- Disarankan false agar lebih cepat
+    SafeMode = true,
+    Timeout = 45,
+    
+    -- Extra Options (UniversalSynSaveInstance)
+    RemoveLocked = true,
+    RemoveScripts = false,          -- Ubah jadi true jika tidak mau ikut script
+    IncludeServices = true,
 }
 
-print("🚀 Sedang menyalin map... Tunggu beberapa detik!")
+print("===========================================")
+print("     COPY MAP BY KAWARASTUDIO")
+print("===========================================")
+print("📌 Game Name : " .. GameName)
+print("📁 File Name : " .. Options.Name .. ".rbxl")
+print("🚀 Sedang menyalin map... Harap tunggu!")
+print("===========================================")
+
 synsaveinstance(Options)
-print("✅ Map berhasil disimpan! Cek folder Xeno Workspace")
+
+print("✅ Berhasil! Map telah disimpan.")
+print("📂 Cek folder: Xeno Workspace")
+print("===========================================")
