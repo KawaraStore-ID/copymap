@@ -1,29 +1,14 @@
--- Script by kawarastudio
+local synsaveinstance = loadstring(game:HttpGet("https://raw.githubusercontent.com/luau/UniversalSynSaveInstance/main/saveinstance.luau", true))()
 
--- Ambil nama game secara otomatis
-local mapName = game.Name
+local Options = {
+    Name = "Copied_Map_" .. os.date("%Y%m%d_%H%M%S"),  -- Nama file otomatis
+    SaveTerrain = true,          -- Simpan terrain (penting!)
+    DecompileScripts = true,     -- Decompile script (bisa dibuka di Studio)
+    SaveBytecode = true,
+    SafeMode = true,             -- Lebih aman
+    Timeout = 30
+}
 
--- Membersihkan nama agar aman untuk file
-local cleanMapName = mapName:gsub("[%s/\\:%*%?\"<>|]", "_")
-
-saveinstance({
-    Mode = "Full",
-    Decompile = true,
-    SaveToFolder = "COPY MAP - " .. cleanMapName,
-    FileName = "copy - " .. cleanMapName,
-    Include = {
-        game.Workspace,
-        game.ReplicatedStorage,
-        game.ReplicatedFirst,
-        game.Lighting,
-        game.StarterGui,
-        game.StarterPlayer,
-        game.SoundService,
-        game.Chat,
-        game.Teams,
-        game.ServerScriptService,
-        game.ServerStorage,
-    },
-    Timeout = 60,
-    ShowProgress = true
-})
+print("🚀 Sedang menyalin map... Tunggu beberapa detik!")
+synsaveinstance(Options)
+print("✅ Map berhasil disimpan! Cek folder Xeno Workspace")
