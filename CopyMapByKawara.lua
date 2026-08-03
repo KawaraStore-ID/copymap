@@ -1,4 +1,4 @@
--- Panel Cheat Roblox Premium
+-- Panel Cheat Roblox Premium (Fixed)
 
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
@@ -71,7 +71,7 @@ BackgroundGradient.Name = "BackgroundGradient"
 BackgroundGradient.Parent = MainFrame
 BackgroundGradient.BackgroundTransparency = 1
 BackgroundGradient.Size = UDim2.new(1, 0, 1, 0)
-BackgroundGradient.Image = "rbxassetid://8992356873" -- Galaxy background
+BackgroundGradient.Image = "rbxassetid://8992356873"
 BackgroundGradient.ImageColor3 = Color3.fromRGB(30, 15, 60)
 BackgroundGradient.ScaleType = Enum.ScaleType.Tile
 BackgroundGradient.TileSize = UDim2.new(0, 200, 0, 200)
@@ -112,7 +112,7 @@ Credit.TextColor3 = Color3.fromRGB(200, 200, 255)
 Credit.TextSize = 12
 Credit.TextXAlignment = Enum.TextXAlignment.Right
 
--- Tombol Close (DIPERBAIKI - lebih rapi)
+-- Tombol Close
 CloseButton.Name = "CloseButton"
 CloseButton.Parent = TitleBar
 CloseButton.BackgroundColor3 = Color3.fromRGB(255, 60, 60)
@@ -128,7 +128,7 @@ CloseButton.ZIndex = 2
 CloseCorner.Parent = CloseButton
 CloseCorner.CornerRadius = UDim.new(0, 8)
 
--- Tombol Minimize (DIPERBAIKI - lebih rapi)
+-- Tombol Minimize
 MinimizeButton.Name = "MinimizeButton"
 MinimizeButton.Parent = TitleBar
 MinimizeButton.BackgroundColor3 = Color3.fromRGB(255, 180, 0)
@@ -250,7 +250,7 @@ FlyButton, FlyStatus = CreatePremiumButton(
     UDim2.new(0.1, 0, 0.48, 0)
 )
 
--- Tombol CopyMap
+-- Tombol CopyMap - DIPERBAIKI
 CopyMapButton, CopyMapStatus = CreatePremiumButton(
     "CopyMapButton", 
     "COPY MAP", 
@@ -305,7 +305,6 @@ local function ToggleFly()
         if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
             local HumanoidRootPart = LocalPlayer.Character.HumanoidRootPart
             
-            -- Buat BodyVelocity dan BodyGyro
             BodyVelocity = Instance.new("BodyVelocity")
             BodyGyro = Instance.new("BodyGyro")
             
@@ -320,7 +319,6 @@ local function ToggleFly()
             
             Flying = true
             
-            -- Koneksi input untuk fly
             local FlyConnection
             FlyConnection = RunService.Heartbeat:Connect(function()
                 if not Flying or not BodyVelocity or not BodyGyro then
@@ -333,7 +331,6 @@ local function ToggleFly()
                 
                 local moveDirection = Vector3.new(0, 0, 0)
                 
-                -- Kontrol WASD
                 if UserInputService:IsKeyDown(Enum.KeyCode.W) then
                     moveDirection = moveDirection + Camera.CFrame.LookVector
                 end
@@ -347,7 +344,6 @@ local function ToggleFly()
                     moveDirection = moveDirection + Camera.CFrame.RightVector
                 end
                 
-                -- Normalize dan terapkan kecepatan
                 if moveDirection.Magnitude > 0 then
                     moveDirection = moveDirection.Unit * FlySpeed
                 end
@@ -355,7 +351,6 @@ local function ToggleFly()
                 BodyVelocity.Velocity = moveDirection
             end)
             
-            -- Handle karakter baru
             LocalPlayer.CharacterAdded:Connect(function(character)
                 wait(1)
                 if FlyEnabled and character:FindFirstChild("HumanoidRootPart") then
@@ -395,12 +390,11 @@ local function ToggleFly()
     end
 end
 
--- DIPERBAIKI: Sistem Wallhack yang tetap aktif meskipun karakter mati
-local WallhackHighlights = {} -- Menyimpan referensi highlight
+-- DIPERBAIKI: Sistem Wallhack
+local WallhackHighlights = {}
 
 local function CreateOutline(character, isEnemy)
     if character and character:FindFirstChild("Humanoid") and character:FindFirstChild("HumanoidRootPart") then
-        -- Hapus highlight lama jika ada
         local oldHighlight = character:FindFirstChild("CheatHighlight")
         if oldHighlight then
             oldHighlight:Destroy()
@@ -423,7 +417,6 @@ local function CreateOutline(character, isEnemy)
         highlight.FillTransparency = 0.7
         highlight.OutlineTransparency = 0
         
-        -- Simpan referensi
         WallhackHighlights[character] = highlight
         
         return highlight
@@ -431,12 +424,11 @@ local function CreateOutline(character, isEnemy)
     return nil
 end
 
--- DIPERBAIKI: Fungsi untuk memantau karakter yang respawn
 local function MonitorPlayerRespawn(player)
     if not player then return end
     
     player.CharacterAdded:Connect(function(character)
-        wait(1) -- Tunggu karakter fully loaded
+        wait(1)
         if WallhackEnabled then
             local isEnemy = player.Team ~= LocalPlayer.Team
             CreateOutline(character, isEnemy)
@@ -452,19 +444,16 @@ local function ToggleWallhack()
         WallhackStatus.TextColor3 = Color3.fromRGB(100, 255, 100)
         WallhackButton.UIStroke.Color = Color3.fromRGB(0, 255, 0)
         
-        -- Aktifkan wallhack untuk semua pemain
         for _, player in pairs(Players:GetPlayers()) do
             if player ~= LocalPlayer then
                 if player.Character then
                     local isEnemy = player.Team ~= LocalPlayer.Team
                     CreateOutline(player.Character, isEnemy)
                 end
-                -- Pantau respawn untuk pemain ini
                 MonitorPlayerRespawn(player)
             end
         end
         
-        -- Pantau pemain baru yang join
         Players.PlayerAdded:Connect(function(player)
             MonitorPlayerRespawn(player)
             wait(1)
@@ -479,7 +468,6 @@ local function ToggleWallhack()
         WallhackStatus.TextColor3 = Color3.fromRGB(255, 100, 100)
         WallhackButton.UIStroke.Color = Color3.fromRGB(0, 255, 255)
         
-        -- Nonaktifkan semua wallhack
         for _, player in pairs(Players:GetPlayers()) do
             if player.Character then
                 local highlight = player.Character:FindFirstChild("CheatHighlight")
@@ -560,32 +548,40 @@ local function ToggleNoclip()
     end
 end
 
--- Fungsi CopyMap
+-- DIPERBAIKI: Fungsi CopyMap dengan pencegahan bug
+local CopyMapRunning = false
+
 local function ToggleCopyMap()
+    -- Cegah multiple click
+    if CopyMapRunning then
+        CopyMapStatus.Text = "Status: WAIT..."
+        CopyMapStatus.TextColor3 = Color3.fromRGB(255, 255, 0)
+        return
+    end
+    
+    CopyMapRunning = true
     CopyMapStatus.Text = "Status: COPYING..."
     CopyMapStatus.TextColor3 = Color3.fromRGB(255, 255, 0)
     CopyMapButton.UIStroke.Color = Color3.fromRGB(255, 255, 0)
+    CopyMapButton.BackgroundColor3 = Color3.fromRGB(80, 80, 40)
     
-    -- Load dan jalankan CopyMap
+    -- Panggil CopyMap dengan pcall yang lebih baik
     local success, err = pcall(function()
         -- =============================================
         --     COPY MAP BY KAWARASTUDIO
-        --     Executor : Xeno / Any Synapse Support
         -- =============================================
         
         local synsaveinstance = loadstring(game:HttpGet("https://raw.githubusercontent.com/luau/UniversalSynSaveInstance/main/saveinstance.luau", true))()
         
-        -- Ambil nama game otomatis
         local function getCleanGameName()
             local success, name = pcall(function()
                 return game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name
             end)
             
             if success and name then
-                -- Bersihkan nama agar aman untuk file
                 local clean = name:gsub("[%s%c%p]", "_")
                 clean = clean:gsub("__+", "_")
-                clean = clean:sub(1, 100) -- Batasi panjang nama
+                clean = clean:sub(1, 100)
                 return clean
             else
                 return "Unknown_Map"
@@ -599,13 +595,11 @@ local function ToggleCopyMap()
             Name = "COPYMAP_" .. GameName .. "_" .. Timestamp,
             SaveTerrain = true,
             DecompileScripts = true,
-            SaveBytecode = false,           -- Disarankan false agar lebih cepat
+            SaveBytecode = false,
             SafeMode = true,
             Timeout = 45,
-            
-            -- Extra Options (UniversalSynSaveInstance)
             RemoveLocked = true,
-            RemoveScripts = false,          -- Ubah jadi true jika tidak mau ikut script
+            RemoveScripts = true,
             IncludeServices = true,
         }
         
@@ -624,27 +618,47 @@ local function ToggleCopyMap()
         print("===========================================")
     end)
     
+    -- Reset status setelah selesai
+    wait(1)
+    CopyMapRunning = false
+    
     if success then
         CopyMapStatus.Text = "Status: DONE ✓"
         CopyMapStatus.TextColor3 = Color3.fromRGB(100, 255, 100)
         CopyMapButton.UIStroke.Color = Color3.fromRGB(0, 255, 0)
+        CopyMapButton.BackgroundColor3 = Color3.fromRGB(40, 40, 60)
+        
+        -- Kembalikan ke normal setelah 3 detik
+        wait(3)
+        if not CopyMapRunning then
+            CopyMapStatus.Text = "Status: OFF"
+            CopyMapStatus.TextColor3 = Color3.fromRGB(255, 100, 100)
+            CopyMapButton.UIStroke.Color = Color3.fromRGB(0, 255, 255)
+        end
     else
         CopyMapStatus.Text = "Status: FAILED ✗"
         CopyMapStatus.TextColor3 = Color3.fromRGB(255, 0, 0)
         CopyMapButton.UIStroke.Color = Color3.fromRGB(255, 0, 0)
+        CopyMapButton.BackgroundColor3 = Color3.fromRGB(60, 20, 20)
         warn("Failed to CopyMap: " .. tostring(err))
+        
+        wait(3)
+        if not CopyMapRunning then
+            CopyMapStatus.Text = "Status: OFF"
+            CopyMapStatus.TextColor3 = Color3.fromRGB(255, 100, 100)
+            CopyMapButton.UIStroke.Color = Color3.fromRGB(0, 255, 255)
+            CopyMapButton.BackgroundColor3 = Color3.fromRGB(40, 40, 60)
+        end
     end
 end
 
 -- Fungsi Minimize
 local function ToggleMinimize()
     if MainFrame.Size.Y.Offset == 520 then
-        -- Minimize
         ButtonsContainer.Visible = false
         local tween = TweenService:Create(MainFrame, TweenInfo.new(0.3), {Size = UDim2.new(0, 350, 0, 40)})
         tween:Play()
     else
-        -- Maximize
         local tween = TweenService:Create(MainFrame, TweenInfo.new(0.3), {Size = UDim2.new(0, 350, 0, 520)})
         tween:Play()
         tween.Completed:Connect(function()
@@ -653,12 +667,12 @@ local function ToggleMinimize()
     end
 end
 
--- Event handlers
+-- Event handlers untuk tombol
 WallhackButton.MouseButton1Click:Connect(ToggleWallhack)
 SpeedButton.MouseButton1Click:Connect(ToggleSpeed)
 NoclipButton.MouseButton1Click:Connect(ToggleNoclip)
 FlyButton.MouseButton1Click:Connect(ToggleFly)
-CopyMapButton.MouseButton1Click:Connect(ToggleCopyMap)
+CopyMapButton.MouseButton1Click:Connect(ToggleCopyMap) -- DIPERBAIKI
 MinimizeButton.MouseButton1Click:Connect(ToggleMinimize)
 CloseButton.MouseButton1Click:Connect(function()
     local tween = TweenService:Create(MainFrame, TweenInfo.new(0.3), {Size = UDim2.new(0, 0, 0, 0)})
@@ -667,9 +681,12 @@ CloseButton.MouseButton1Click:Connect(function()
     ScreenGui:Destroy()
 end)
 
--- Input keyboard
+-- Input keyboard - DIPERBAIKI
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
     if gameProcessed then return end
+    
+    -- Pastikan panel tidak dalam keadaan minimize
+    if MainFrame.Size.Y.Offset < 100 then return end
     
     if input.KeyCode == Enum.KeyCode.U then
         ToggleWallhack()
@@ -684,7 +701,10 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
     elseif input.KeyCode == Enum.KeyCode.P then
         ScreenGui:Destroy()
     elseif input.KeyCode == Enum.KeyCode.C then
-        ToggleCopyMap()
+        -- CEK: Apakah CopyMap sedang berjalan?
+        if not CopyMapRunning then
+            ToggleCopyMap()
+        end
     end
 end)
 
