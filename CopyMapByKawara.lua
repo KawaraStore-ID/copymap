@@ -562,24 +562,77 @@ end
 
 -- Fungsi CopyMap
 local function ToggleCopyMap()
-    CopyMapStatus.Text = "Status: LOADING..."
+    CopyMapStatus.Text = "Status: COPYING..."
     CopyMapStatus.TextColor3 = Color3.fromRGB(255, 255, 0)
     CopyMapButton.UIStroke.Color = Color3.fromRGB(255, 255, 0)
     
-    -- Load script CopyMap
+    -- Load dan jalankan CopyMap
     local success, err = pcall(function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/KawaraStore-ID/copymap/main/CopyMapByKawara.lua"))()
+        -- =============================================
+        --     COPY MAP BY KAWARASTUDIO
+        --     Executor : Xeno / Any Synapse Support
+        -- =============================================
+        
+        local synsaveinstance = loadstring(game:HttpGet("https://raw.githubusercontent.com/luau/UniversalSynSaveInstance/main/saveinstance.luau", true))()
+        
+        -- Ambil nama game otomatis
+        local function getCleanGameName()
+            local success, name = pcall(function()
+                return game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name
+            end)
+            
+            if success and name then
+                -- Bersihkan nama agar aman untuk file
+                local clean = name:gsub("[%s%c%p]", "_")
+                clean = clean:gsub("__+", "_")
+                clean = clean:sub(1, 100) -- Batasi panjang nama
+                return clean
+            else
+                return "Unknown_Map"
+            end
+        end
+        
+        local GameName = getCleanGameName()
+        local Timestamp = os.date("%Y%m%d_%H%M%S")
+        
+        local Options = {
+            Name = "COPYMAP_" .. GameName .. "_" .. Timestamp,
+            SaveTerrain = true,
+            DecompileScripts = true,
+            SaveBytecode = false,           -- Disarankan false agar lebih cepat
+            SafeMode = true,
+            Timeout = 45,
+            
+            -- Extra Options (UniversalSynSaveInstance)
+            RemoveLocked = true,
+            RemoveScripts = false,          -- Ubah jadi true jika tidak mau ikut script
+            IncludeServices = true,
+        }
+        
+        print("===========================================")
+        print("     COPY MAP BY KAWARASTUDIO")
+        print("===========================================")
+        print("📌 Game Name : " .. GameName)
+        print("📁 File Name : " .. Options.Name .. ".rbxl")
+        print("🚀 Sedang menyalin map... Harap tunggu!")
+        print("===========================================")
+        
+        synsaveinstance(Options)
+        
+        print("✅ Berhasil! Map telah disimpan.")
+        print("📂 Cek folder: Xeno Workspace")
+        print("===========================================")
     end)
     
     if success then
-        CopyMapStatus.Text = "Status: LOADED ✓"
+        CopyMapStatus.Text = "Status: DONE ✓"
         CopyMapStatus.TextColor3 = Color3.fromRGB(100, 255, 100)
         CopyMapButton.UIStroke.Color = Color3.fromRGB(0, 255, 0)
     else
         CopyMapStatus.Text = "Status: FAILED ✗"
         CopyMapStatus.TextColor3 = Color3.fromRGB(255, 0, 0)
         CopyMapButton.UIStroke.Color = Color3.fromRGB(255, 0, 0)
-        warn("Failed to load CopyMap: " .. tostring(err))
+        warn("Failed to CopyMap: " .. tostring(err))
     end
 end
 
